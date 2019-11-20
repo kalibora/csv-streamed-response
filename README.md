@@ -9,10 +9,10 @@ CSV streamed response that saves memory usage with symfony and doctrine.
 ```php
 class DefaultController extends Controller
 {
-	public function csvAction(UserRepository $repository)
+    public function csvAction(UserRepository $repository)
     {
         return CsvStreamedResponse::createFromDoctrineQueryBuilder(
-            $userRepository->createQueryBuilder('u')->select('u.id, u.name')
+            $repository->createQueryBuilder('u')->select('u.id, u.name')
         );
     }
 }
@@ -23,10 +23,10 @@ class DefaultController extends Controller
 ```php
 class DefaultController extends Controller
 {
-	public function csvAction(UserRepository $repository)
+    public function csvAction(UserRepository $repository)
     {
         return CsvStreamedResponse::createFromDoctrineQueryBuilder(
-            $userRepository->createQueryBuilder('u'),
+            $repository->createQueryBuilder('u'),
             [
                 'user_id',
                 'user_name',

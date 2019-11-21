@@ -11,9 +11,12 @@ class DefaultController extends Controller
 {
     public function csvAction(UserRepository $repository)
     {
-        return CsvStreamedResponse::createFromDoctrineQueryBuilder(
-            $repository->createQueryBuilder('u')->select('u.id, u.name')
-        );
+        return CsvStreamedResponse::builder()
+            ->setRowsFromDoctrineQueryBuilder(
+                $repository->createQueryBuilder('u')->select('u.id, u.name')
+            )
+            ->build()
+        ;
     }
 }
 ```
@@ -25,19 +28,22 @@ class DefaultController extends Controller
 {
     public function csvAction(UserRepository $repository)
     {
-        return CsvStreamedResponse::createFromDoctrineQueryBuilder(
-            $repository->createQueryBuilder('u'),
-            [
+        return CsvStreamedResponse::builder()
+            ->setRowsFromDoctrineQueryBuilder(
+                $repository->createQueryBuilder('u'),
+                function ($user) {
+                    return [
+                        $user->getId(),
+                        $user->getName(),
+                    ];
+                }
+            )
+            ->setCsvColumnHeaders([
                 'user_id',
                 'user_name',
-            ],
-            function ($user) {
-                return [
-                    $user->getId(),
-                    $user->getName(),
-                ];
-            }
-        );
+            ])
+            ->build()
+        ;
     }
 }
 ```

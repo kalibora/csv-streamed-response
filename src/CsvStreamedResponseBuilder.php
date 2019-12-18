@@ -50,9 +50,14 @@ class CsvStreamedResponseBuilder
 
     public function setRowsFromDoctrineQueryBuilder(
         QueryBuilder $qb,
-        callable $extractRowCallback = null
+        callable $extractRowCallback = null,
+        bool $fetchJoinCollection = false,
+        int $chunkSize = 100
     ) : self {
-        $gen = ChunkGeneratorBuilder::fromDoctrineQueryBuilder($qb)->build();
+        $gen = ChunkGeneratorBuilder::fromDoctrineQueryBuilder($qb, $specifiedIds = [], $fetchJoinCollection)
+            ->setChunkSize($chunkSize)
+            ->build()
+        ;
 
         if ($extractRowCallback) {
             $rows = new CallbackCollection($gen(), $extractRowCallback);

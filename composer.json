@@ -42,7 +42,7 @@
         "php": ">=7.1.0",
         "doctrine/orm": "^2.6",
         "goodby/csv": "^1.3",
-        "kalibora/chunk-generator": "^0.2.1",
+        "kalibora/chunk-generator": "^0.3",
         "symfony/http-foundation": "^4.3"
     },
     "require-dev": {

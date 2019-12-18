@@ -47,3 +47,39 @@ class DefaultController extends Controller
     }
 }
 ```
+
+### example 3: Fetch join a to-many collection in QueryBuilder
+
+Suppress error for `Iterate with fetch join in class ...`.
+
+```php
+class DefaultController extends Controller
+{
+    public function csvAction(UserRepository $repository)
+    {
+        $qb = $repository->createQueryBuilder('u')
+            ->leftJoin('u.emails, 'em') // Join to-many collection
+        ;
+
+        return CsvStreamedResponse::builder()
+            ->setRowsFromDoctrineQueryBuilder(
+                $qb,
+                function ($user) {
+                    return [
+                        $user->getId(),
+                        $user->getName(),
+                        implode(',', $user->getEmails()),
+                    ];
+                },
+                $fetchJoinCollection = true
+            )
+            ->setCsvColumnHeaders([
+                'user_id',
+                'user_name',
+                'emails,
+            ])
+            ->build()
+        ;
+    }
+}
+```

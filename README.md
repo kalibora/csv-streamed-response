@@ -58,7 +58,7 @@ class DefaultController extends Controller
     public function csvAction(UserRepository $repository)
     {
         $qb = $repository->createQueryBuilder('u')
-            ->leftJoin('u.emails, 'em') // Join to-many collection
+            ->leftJoin('u.emails', 'em') // Join to-many collection
         ;
 
         return CsvStreamedResponse::builder()
@@ -76,7 +76,7 @@ class DefaultController extends Controller
             ->setCsvColumnHeaders([
                 'user_id',
                 'user_name',
-                'emails,
+                'emails',
             ])
             ->build()
         ;

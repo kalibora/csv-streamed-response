@@ -52,12 +52,18 @@ class CsvStreamedResponseBuilder
         QueryBuilder $qb,
         callable $extractRowCallback = null,
         bool $fetchJoinCollection = false,
-        int $chunkSize = 100
+        int $chunkSize = 100,
+        ?callable $onBeforeChunk = null
     ) : self {
-        $gen = ChunkGeneratorBuilder::fromDoctrineQueryBuilder($qb, $specifiedIds = [], $fetchJoinCollection)
+        $builder = ChunkGeneratorBuilder::fromDoctrineQueryBuilder($qb, $specifiedIds = [], $fetchJoinCollection)
             ->setChunkSize($chunkSize)
-            ->build()
         ;
+
+        if ($onBeforeChunk) {
+            $builder->onBeforeChunk($onBeforeChunk);
+        }
+
+        $gen = $builder->build();
 
         if ($extractRowCallback) {
             $rows = new CallbackCollection($gen(), $extractRowCallback);

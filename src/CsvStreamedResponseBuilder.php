@@ -41,6 +41,13 @@ class CsvStreamedResponseBuilder
         $this->httpHeaders = $httpHeaders;
     }
 
+    public function setRows(iterable $rows) : self
+    {
+        $this->rows = $rows;
+
+        return $this;
+    }
+
     public function setRowsFromArray(array $rows) : self
     {
         $this->rows = $rows;
